@@ -137,10 +137,10 @@ app.post("/api/items", (req, res) => {
 
     if("name" in req.body && "rarity" in req.body) {
         listOfItems.push(insertItem)
-        req.send({"msg" : "Item was successfully inserted"})
+        res.status(201).send({"msg" : "Item was successfully inserted"})
     }
 
-    req.status(401).send({"msg" : "Sorry, you are missing a rarity or item name"})
+    res.status(401).send({"msg" : "Sorry, you are missing a rarity or item name"})
 })
 
 app.delete("/api/items/:item_name", (req, res) => {
