@@ -169,8 +169,7 @@ app.put("/api/items/:item_id", (req, res) => {
 
 
 app.get("/", (req, res) =>  {
-    res.status(418).send({"msg" : "This is Luck Be a Landlord API. \n /api/items  - to list everything \n /api/items/:item_id  - put request that's not implemented yet \n
-    /api/items/:item_name - Delete \n /api/items/:item_name - Get request /api/items - Post request"});
+    res.status(418).send("This is Luck Be a Landlord API. \n /api/items  - to list everything \n /api/items/:item_id  - put request that's not implemented yet \n /api/items/:item_name - Delete \n /api/items/:item_name - Get request /api/items - Post request");
 });
  
 // start the server and output a message if the server started successfully
