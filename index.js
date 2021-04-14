@@ -27,9 +27,6 @@ const connectToDb = () => {
 // )
 
 // starting express after database is connected
-const onHttpStart = () => {
-   console.log(Server has started and is listening on port ${HTTP_PORT})
-}
 
 mongoose.connect(mongoURL, connectionOptions).then(
    () => {
