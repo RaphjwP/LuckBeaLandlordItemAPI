@@ -12,7 +12,7 @@ const mongoose = require("mongoose");
 const mongoURL = "mongodb+srv://dbUser:abcd1234@landlorditemcluster.dzhpy.mongodb.net/LandlordItems?retryWrites=true&w=majority"
 
 const connectToDb = () => {
-    return mongoose.connect(mongoRUL, {useNewUrlParser: true, useUnifiedTopology: true})
+    return mongoose.connect(mongoURL, {useNewUrlParser: true, useUnifiedTopology: true})
 }
 
 // mongoose.connect(mongoURL, connectionOptions).then(
