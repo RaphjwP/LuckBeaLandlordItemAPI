@@ -28,17 +28,17 @@ const connectToDb = () => {
 
 // starting express after database is connected
 
-mongoose.connect(mongoURL, connectionOptions).then(
-   () => {
-       // start the server and output a message if the server started successfully
-       app.listen(HTTP_PORT, onHttpStart);
-   }
-).catch(
-   (err) => {
-       console.log("Error connecting to database")
-       console.log(err)
-   }
-)
+// mongoose.connect(mongoURL, connectionOptions).then(
+//    () => {
+//        // start the server and output a message if the server started successfully
+//        app.listen(HTTP_PORT, onHttpStart);
+//    }
+// ).catch(
+//    (err) => {
+//        console.log("Error connecting to database")
+//        console.log(err)
+//    }
+// )
 
 const Schema = mongoose.Schema
 
