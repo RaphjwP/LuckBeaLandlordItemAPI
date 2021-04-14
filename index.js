@@ -137,7 +137,7 @@ app.post("/api/items", (req, res) => {
 
     if("name" in req.body && "rarity" in req.body) {
         listOfItems.push(insertItem)
-        req.status(201).send({"msg" : "Item was successfully inserted"})
+        req.send({"msg" : "Item was successfully inserted"})
     }
 
     req.status(401).send({"msg" : "Sorry, you are missing a rarity or item name"})
@@ -169,7 +169,8 @@ app.put("/api/items/:item_id", (req, res) => {
 
 
 app.get("/", (req, res) =>  {
-    res.status(418).send("Hello");
+    res.status(418).send("This is Luck Be a Landlord API. \n /api/items  - to list everything \n /api/items/:item_id  - put request that's not implemented yet \n
+    /api/items/:item_name - Delete \n /api/items/:item_name - Get request /api/items - Post request");
 });
  
 // start the server and output a message if the server started successfully
