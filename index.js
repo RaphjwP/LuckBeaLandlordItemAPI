@@ -8,6 +8,53 @@ app.use(express.json())
 // specify the port that your server will run on
 const HTTP_PORT = process.env.PORT || 8080;
  
+const mongoose = require("mongoose");
+const mongoURL = "mongodb+srv://dbUser:abcd1234@landlorditemcluster.dzhpy.mongodb.net/LandlordItems?retryWrites=true&w=majority"
+
+const connectToDb = () => {
+    return mongoose.connect(mongoRUL, {useNewUrlParser: true, useUnifiedTopology: true})
+}
+
+// mongoose.connect(mongoURL, connectionOptions).then(
+//     ()=> {
+
+//     }
+// ).catch(
+//     (err) => {
+//         console.log("Error connecting to database")
+//         console.log(err)
+//     }
+// )
+
+// starting express after database is connected
+const onHttpStart = () => {
+   console.log(Server has started and is listening on port ${HTTP_PORT})
+}
+
+mongoose.connect(mongoURL, connectionOptions).then(
+   () => {
+       // start the server and output a message if the server started successfully
+       app.listen(HTTP_PORT, onHttpStart);
+   }
+).catch(
+   (err) => {
+       console.log("Error connecting to database")
+       console.log(err)
+   }
+)
+
+const Schema = mongoose.Schema
+
+const ItemSchema = new Schema({
+    id: Number,
+    name: String,
+    rarity: String,
+    description: String,
+    goldPerTurn: Number
+})
+
+const Item = mongoose.model("items_table", ItemSchema)
+
 // data
 let listOfItems = [
     {
@@ -132,4 +179,18 @@ app.get("/", (req, res) =>  {
 const onHttpStart = () => {
  console.log('Server has started and is listening on port ${HTTP_PORT}')
 }
-app.listen(HTTP_PORT, onHttpStart);
+
+
+//app.listen(HTTP_PORT, onHttpStart);
+connectToDb().then( ()=> {
+   // 1. if you were successful in connecting to the database, then
+   // ouptut a message
+   console.log("Connected to database, loading initial list of books into database")
+   //loadInitialMovieList() 
+   // 2. after you connect to thedb, start the express server
+   console.log("Starting server")
+   app.listen(HTTP_PORT, onHttpStart)
+}).catch( (error) => {
+   console.log("Error from database")
+   console.log(error)
+})
