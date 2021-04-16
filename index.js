@@ -67,14 +67,14 @@ const item8 = new Item({
         "description": "Adjacent empty squares give 1 con more. Destrys itself if adjacent to 0 empty squares. Gives 8 coins when destroyed.",
         "goldPerTurn" : 0})
 
-item1.save()
-item2.save()
-item3.save()
-item4.save()
-item5.save()
-item6.save()
-item7.save()
-item8.save()
+// item1.save()
+// item2.save()
+// item3.save()
+// item4.save()
+// item5.save()
+// item6.save()
+// item7.save()
+// item8.save()
 
 
 // data
