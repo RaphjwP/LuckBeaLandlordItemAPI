@@ -15,35 +15,9 @@ const connectToDb = () => {
     return mongoose.connect(mongoURL, {useNewUrlParser: true, useUnifiedTopology: true})
 }
 
-// mongoose.connect(mongoURL, connectionOptions).then(
-//     ()=> {
-
-//     }
-// ).catch(
-//     (err) => {
-//         console.log("Error connecting to database")
-//         console.log(err)
-//     }
-// )
-
-// starting express after database is connected
-
-// mongoose.connect(mongoURL, connectionOptions).then(
-//    () => {
-//        // start the server and output a message if the server started successfully
-//        app.listen(HTTP_PORT, onHttpStart);
-//    }
-// ).catch(
-//    (err) => {
-//        console.log("Error connecting to database")
-//        console.log(err)
-//    }
-// )
-
 const Schema = mongoose.Schema
 
 const ItemSchema = new Schema({
-    id: Number,
     name: String,
     rarity: String,
     description: String,
@@ -52,42 +26,42 @@ const ItemSchema = new Schema({
 
 const Item = mongoose.model("items_table", ItemSchema)
 
-const item1 = new Item({"id": 1,
+const item1 = new Item({
         "name": "Shiny Pebble",
         "rarity": "common",
         "description": "You are 1.1x more likely to find Uncommon, Rare, and Very Rare symbols.",
         "goldPerTurn" : 0})
-const item2 = new Item({"id": 2,
+const item2 = new Item({
         "name": "Magpie",
         "rarity": "common",
         "description": "Gives you 9 gold every 4 spins.",
         "goldPerTurn" : -1})
-const item3 = new Item({"id": 3,
+const item3 = new Item({
         "name": "King Midas",
         "rarity": "rare",
         "description": "Adds 1 Gold each turn. Adjacent Gold gives 3x more gold.",
         "goldPerTurn" : 2})
-const item4 = new Item({"id": 4,
+const item4 = new Item({
         "name": "Goose",
         "rarity": "common",
         "description": "Has a 1% chance of adding a Golden Egg.",
         "goldPerTurn" : 1})
-const item5 = new Item({"id": 5,
+const item5 = new Item({
         "name": "Bee",
         "rarity": "uncomon",
         "description": "Adject Flowers give 2x more gold.",
         "goldPerTurn" : 1})
-const item6 = new Item({"id": 6,
+const item6 = new Item({
         "name": "Golden Egg",
         "rarity": "rare",
         "description": "",
         "goldPerTurn" : 3})
-const item7 = new Item({"id": 7,
+const item7 = new Item({
         "name": "Cat",
         "rarity": "common",
         "description": "",
         "goldPerTurn" : 1})
-const item8 = new Item({"id": 8,
+const item8 = new Item({
         "name": "Void Stone",
         "rarity": "uncommon",
         "description": "Adjacent empty squares give 1 con more. Destrys itself if adjacent to 0 empty squares. Gives 8 coins when destroyed.",
@@ -182,14 +156,17 @@ app.get("/api/items/:item_name", (req, res) => {
     console.log(req.params)
     const itemName = req.params.item_name;
 
-    for(let i = 0; i < listOfItems.length; i++){
-        let item = listOfItems[i]
-        if(item.name === itemName){
-            return res.status(200).send(item)
+    Item.find({name: itemName}).exec().then(
+        (results) => {
+            console.log(results)
+            res.status(200).send(results)
         }
-    }
-
-    res.status(404).send({msg: `Sorry, cound not find the item with item name given ${itemName}`})
+    ).catch(
+        (err) => {
+            console.log(error)
+            res.status(500).send("Error when getting students from database.")
+        }
+    )
 })
 
 app.post("/api/items", (req, res) => {
@@ -197,7 +174,11 @@ app.post("/api/items", (req, res) => {
     console.log(`Would like to insert a new data : ${insertItem.name}`)
 
     if("name" in req.body && "rarity" in req.body) {
-        listOfItems.push(insertItem)
+        newItem = new Item({"name": req.body.name,
+        "rarity": req.body.rarity,
+        "description": req.body.description,
+        "goldPerTurn" : req.body.goldPerTurn})
+        newItem.save()
         res.status(201).send({"msg" : "Item was successfully inserted"})
     }
 
@@ -207,21 +188,18 @@ app.post("/api/items", (req, res) => {
 app.delete("/api/items/:item_name", (req, res) => {
     const itemName = req.params.item_name
     
-    let pos = undefined
-    for(let i = 0; i < listOfItems.length; i++){
-        if(listOfItems[i].name === itemName){
-            pos = i
-            break
+    Item.deleteOne({name: itemName}).exec().then(
+        (results) => {
+            console.log(results)
+            res.status(200).send(results)
         }
-    }
+    ).catch(
+        (err) => {
+            console.log(error)
+            res.status(500).send("Error when getting students from database.")
+        }
+    )
 
-    if (pos === undefined) {
-        res.status(404).send({"msg" : `Could not find item with name of ${itemName}`})
-        return
-    }
-
-    listOfItems.splice(pos, 1)
-    res.send({"msg": `Deleted item with the item name of ${itemName}`})
 })
 
 app.put("/api/items/:item_id", (req, res) => {
@@ -241,11 +219,8 @@ const onHttpStart = () => {
 
 //app.listen(HTTP_PORT, onHttpStart);
 connectToDb().then( ()=> {
-   // 1. if you were successful in connecting to the database, then
-   // ouptut a message
+
    console.log("Connected to database, loading initial list of items into database")
-   //loadInitialMovieList() 
-   // 2. after you connect to thedb, start the express server
    console.log("Starting server")
    app.listen(HTTP_PORT, onHttpStart)
 }).catch( (error) => {
