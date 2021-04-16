@@ -52,69 +52,130 @@ const ItemSchema = new Schema({
 
 const Item = mongoose.model("items_table", ItemSchema)
 
-// data
-let listOfItems = [
-    {
-        "id": 1,
+const item1 = new Item({"id": 1,
         "name": "Shiny Pebble",
         "rarity": "common",
         "description": "You are 1.1x more likely to find Uncommon, Rare, and Very Rare symbols.",
-        "goldPerTurn" : 0
-    },
-    {
-        "id": 2,
+        "goldPerTurn" : 0})
+const item2 = new Item({"id": 2,
         "name": "Magpie",
         "rarity": "common",
         "description": "Gives you 9 gold every 4 spins.",
-        "goldPerTurn" : -1
-    },
-    {
-        "id": 3,
+        "goldPerTurn" : -1})
+const item3 = new Item({"id": 3,
         "name": "King Midas",
         "rarity": "rare",
         "description": "Adds 1 Gold each turn. Adjacent Gold gives 3x more gold.",
-        "goldPerTurn" : 2
-    },
-    {
-        "id": 4,
+        "goldPerTurn" : 2})
+const item4 = new Item({"id": 4,
         "name": "Goose",
         "rarity": "common",
         "description": "Has a 1% chance of adding a Golden Egg.",
-        "goldPerTurn" : 1
-    },
-    {
-        "id": 5,
+        "goldPerTurn" : 1})
+const item5 = new Item({"id": 5,
         "name": "Bee",
         "rarity": "uncomon",
         "description": "Adject Flowers give 2x more gold.",
-        "goldPerTurn" : 1
-    },
-    {
-        "id": 6,
+        "goldPerTurn" : 1})
+const item6 = new Item({"id": 6,
         "name": "Golden Egg",
         "rarity": "rare",
         "description": "",
-        "goldPerTurn" : 3
-    },
-    {
-        "id": 7,
+        "goldPerTurn" : 3})
+const item7 = new Item({"id": 7,
         "name": "Cat",
         "rarity": "common",
         "description": "",
-        "goldPerTurn" : 1
-    },
-    {
-        "id": 8,
+        "goldPerTurn" : 1})
+const item8 = new Item({"id": 8,
         "name": "Void Stone",
         "rarity": "uncommon",
         "description": "Adjacent empty squares give 1 con more. Destrys itself if adjacent to 0 empty squares. Gives 8 coins when destroyed.",
-        "goldPerTurn" : 0
-    }
-]
+        "goldPerTurn" : 0})
+
+item1.save()
+item2.save()
+item3.save()
+item4.save()
+item5.save()
+item6.save()
+item7.save()
+item8.save()
+
+
+// data
+// let listOfItems = [
+//     {
+//         "id": 1,
+//         "name": "Shiny Pebble",
+//         "rarity": "common",
+//         "description": "You are 1.1x more likely to find Uncommon, Rare, and Very Rare symbols.",
+//         "goldPerTurn" : 0
+//     },
+//     {
+//         "id": 2,
+//         "name": "Magpie",
+//         "rarity": "common",
+//         "description": "Gives you 9 gold every 4 spins.",
+//         "goldPerTurn" : -1
+//     },
+//     {
+//         "id": 3,
+//         "name": "King Midas",
+//         "rarity": "rare",
+//         "description": "Adds 1 Gold each turn. Adjacent Gold gives 3x more gold.",
+//         "goldPerTurn" : 2
+//     },
+//     {
+//         "id": 4,
+//         "name": "Goose",
+//         "rarity": "common",
+//         "description": "Has a 1% chance of adding a Golden Egg.",
+//         "goldPerTurn" : 1
+//     },
+//     {
+//         "id": 5,
+//         "name": "Bee",
+//         "rarity": "uncomon",
+//         "description": "Adject Flowers give 2x more gold.",
+//         "goldPerTurn" : 1
+//     },
+//     {
+//         "id": 6,
+//         "name": "Golden Egg",
+//         "rarity": "rare",
+//         "description": "",
+//         "goldPerTurn" : 3
+//     },
+//     {
+//         "id": 7,
+//         "name": "Cat",
+//         "rarity": "common",
+//         "description": "",
+//         "goldPerTurn" : 1
+//     },
+//     {
+//         "id": 8,
+//         "name": "Void Stone",
+//         "rarity": "uncommon",
+//         "description": "Adjacent empty squares give 1 con more. Destrys itself if adjacent to 0 empty squares. Gives 8 coins when destroyed.",
+//         "goldPerTurn" : 0
+//     }
+// ]
 
 // list of url endpoints that your server will respond to
 app.get("/api/items", (req, res) => {
- res.send(listOfItems);
+ Item.find().exec().then(
+        (results) => {
+            console.log(results)
+            res.send(results)
+        }
+    ).catch(
+        (err) => {
+            console.log(error)
+            res.status(500).send("Error when getting students from database.")
+        }
+    )
 });
 
 app.get("/api/items/:item_name", (req, res) => {
@@ -182,7 +243,7 @@ const onHttpStart = () => {
 connectToDb().then( ()=> {
    // 1. if you were successful in connecting to the database, then
    // ouptut a message
-   console.log("Connected to database, loading initial list of books into database")
+   console.log("Connected to database, loading initial list of items into database")
    //loadInitialMovieList() 
    // 2. after you connect to thedb, start the express server
    console.log("Starting server")
